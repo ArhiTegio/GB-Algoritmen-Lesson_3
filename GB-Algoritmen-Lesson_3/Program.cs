@@ -16,6 +16,7 @@ namespace GB_Algoritmen_Lesson_3
             { "1", new BubbleSort() },
             { "2", new BubbleSortOptimized() },
             { "3", new ShakerSort() },
+            { "4", new SortByInserts() },
         };
 
         static int[] mass;
@@ -33,12 +34,12 @@ namespace GB_Algoritmen_Lesson_3
             while (n != "0")
             {
                 WriteLine("Введите номер интересующей вас задачи:" + Environment.NewLine +
-                    "1. Попробовать оптимизировать пузырьковую сортировку. Сравнить количество операций сравнения оптимизированной и неоптимизированной программы. Написать функции сортировки, которые возвращают количество операций." + Environment.NewLine +
-                    "2." + Environment.NewLine +
-                    "2. * Реализовать шейкерную сортировку." + Environment.NewLine +
+                    " Попробовать оптимизировать пузырьковую сортировку. Сравнить количество операций сравнения оптимизированной и неоптимизированной программы. Написать функции сортировки, которые возвращают количество операций." + Environment.NewLine +                    
+                    " * Реализовать шейкерную сортировку." + Environment.NewLine +
                     " Реализовать бинарный алгоритм поиска в виде функции, которой передаётся отсортированный массив.Функция возвращает индекс найденного элемента или –1, если элемент не найден." + Environment.NewLine +
                     " * Подсчитать количество операций для каждой из сортировок и сравнить его с асимптотической сложностью алгоритма." + Environment.NewLine +
-                    "0. Нажмите для выхода из программы.");
+                    "#. Введите объем проверяемого массива." + Environment.NewLine +
+                    "0. Введите 0 для выхода из программы.");
 
                 n = q.Question<int>("Введите любое число", new HashSet<char>() { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0' }, true);
                 if (n == "0") break;
@@ -46,21 +47,24 @@ namespace GB_Algoritmen_Lesson_3
                 Massiv(int.Parse(n), 0);
                 WriteLine($"");
                 WriteLine($"При массиве в обратном порядке:");
-                WriteLine($"Пузырьковая сортировка выполнена за {dict["1"].Work((int[])mass.Clone())} операций." );
+                WriteLine($"Пузырьковая сортировка выполнена за {dict["1"].Work((int[])mass.Clone())} операций.");
                 WriteLine($"Оптимизируемая пузырьковая сортировка выполнена за {dict["2"].Work((int[])mass.Clone())} операций.");
                 WriteLine($"Шейкерная сортировка выполнена за {dict["3"].Work((int[])mass.Clone())} операций.");
+                WriteLine($"Сортировка вставками выполнена за {dict["4"].Work((int[])mass.Clone())} операций.");
                 RandMassiv(int.Parse(n), 0);
                 WriteLine($"");
                 WriteLine($"При случайном заполненом массива:");
                 WriteLine($"Пузырьковая сортировка выполнена за {dict["1"].Work((int[])mass.Clone())} операций.");
                 WriteLine($"Оптимизируемая пузырьковая сортировка выполнена за {dict["2"].Work((int[])mass.Clone())} операций.");
                 WriteLine($"Шейкерная сортировка выполнена за {dict["3"].Work((int[])mass.Clone())} операций.");
+                WriteLine($"Сортировка вставками выполнена за {dict["4"].Work((int[])mass.Clone())} операций.");
                 LastMinMassiv(int.Parse(n), 0);
                 WriteLine($"");
                 WriteLine($"При последнем минимальном в сортированном массиве:");
                 WriteLine($"Пузырьковая сортировка выполнена за {dict["1"].Work((int[])mass.Clone())} операций.");
                 WriteLine($"Оптимизируемая пузырьковая сортировка выполнена за {dict["2"].Work((int[])mass.Clone())} операций.");
                 WriteLine($"Шейкерная сортировка выполнена за {dict["3"].Work((int[])mass.Clone())} операций.");
+                WriteLine($"Сортировка вставками выполнена за {dict["4"].Work((int[])mass.Clone())} операций.");
 
                 WriteLine($"");
                 WriteLine($"Индекс { FindIndexByBinarySearch(mass, 5) } числа 5 в массиве.");
@@ -158,6 +162,29 @@ namespace GB_Algoritmen_Lesson_3
                 }
                 if (sortingCheck) break;
                 else sortingCheck = true;                
+            }
+
+            return operations;
+        }
+
+        static void TwoValuesExchange<T>(T[] x, int i1, int i2) => (x[i1], x[i2]) = (x[i2], x[i1]);
+    }
+
+    class SortByInserts : Act
+    {
+        public override int Work(int[] mass)
+        {
+            var operations = 0;
+            for (int i = 0; i < mass.Length; i++)
+            {
+                int temp = mass[i];
+                int j = i;
+                while (j > 0 && mass[j - 1] > temp)
+                {
+                    operations++;
+                    TwoValuesExchange(mass, j, j - 1);
+                    j--;
+                }
             }
 
             return operations;
